@@ -1,0 +1,55 @@
+﻿
+@model OnlineTicariOtomasyon.Models.Siniflar.SatisHareket
+@{
+    ViewBag.Title = "SatisGetir";
+    Layout = null;
+}
+
+
+@using (Html.BeginForm("SatisGuncelle", "Satis", FormMethod.Post))
+{
+    <div class="form-group">
+        @Html.HiddenFor(x => x.SatisID)
+    </div>
+    <div class="form-group">
+        <label>Ürün Ad</label>
+        @Html.DropDownListFor(x => x.UrunID, (List<SelectListItem>)ViewBag.urun, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label>Cari Ad - Soyad</label>
+        @Html.DropDownListFor(x => x.CariID, (List<SelectListItem>)ViewBag.cari, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label>Personel Ad - Soyad</label>
+        @Html.DropDownListFor(x => x.PersonelID, (List<SelectListItem>)ViewBag.personel, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label>Adet</label>
+        @Html.TextBoxFor(x => x.Adet, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label>Fiyat</label>
+        @Html.TextBoxFor(x => x.Fiyat, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label>Toplam Tutar</label>
+        @Html.TextBoxFor(x => x.ToplamTutar, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label>Tarih</label>
+        @Html.TextBoxFor(x => x.Tarih, new { @class = "form-control" })
+    </div>
+    @*<div class="form-group">
+            <label>Tarih</label>
+            @Html.TextBoxFor(x => x.Tarih, new { @class = "form-control", @type="date", @value="" })
+        </div>*@
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary rounded text-white font-weight-bold">Kaydet</button>
+    </div>
+}
+
+
+
+
+

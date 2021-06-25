@@ -1,0 +1,36 @@
+﻿@model OnlineTicariOtomasyon.Models.Siniflar.FaturaKalem
+@{
+    ViewBag.Title = "YeniKalem";
+    Layout = null;
+}
+
+@using (Html.BeginForm("YeniKalem", "Fatura", FormMethod.Post))
+{
+    <div class="form-group">
+        <label>Açıklama</label>
+        @Html.TextBoxFor(x => x.Aciklama, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label>Miktar</label>
+        @Html.TextBoxFor(x => x.Miktar, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label>Birim Fiyat</label>
+
+        @Html.TextBoxFor(x => x.BirimFiyat, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label>Tutar</label>
+        @Html.TextBoxFor(x => x.Tutar, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <input type="hidden" name="FaturaID" id="FaturaID" value="@ViewBag.faturaID" />
+        @*@Html.TextBoxFor(x => x.FaturaID, new { @class = "form-control", @value = ViewBag.faturaID})*@
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary rounded">Kaydet</button>
+    </div>
+
+}
+

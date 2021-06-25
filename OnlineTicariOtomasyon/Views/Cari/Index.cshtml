@@ -1,0 +1,170 @@
+﻿@using OnlineTicariOtomasyon.Models.Siniflar
+@model List<Cariler>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<a class="btn btn-primary mt-2 mb-2 add text-white font-weight-bold" data-toggle="modal" data-cariaddids="/Cari/CariEkle" data-target="#myModal">Yeni Cari</a>
+<table id="TblCari" class="table table-bordered mt-2">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Ad</th>
+            <th>Soyad</th>
+            <th>Şehir</th>
+            <th>Mail</th>
+            <th>Güncelle</th>
+            <th>Sil</th>
+            <th>Detaylar</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            <td class="td">@item.CariID</td>
+            <td class="td">@item.CariAd</td>
+            <td class="td">@item.CariSoyad</td>
+            <td class="td">@item.CariSehir</td>
+            <td class="td">@item.CariMail</td>
+
+            <td>
+                <a class="btn btn-success rounded text-white font-weight-bold view" data-toggle="modal" data-cariids="/Cari/CariGetir/@item.CariID" data-target="#myModal">Güncelle</a>         
+            </td>
+            <td>
+                <a href="#" class="btn btn-danger text-white font-weight-bold rounded cariSil" data-cariid="@item.CariID">Sil</a>      
+            </td>
+            <td>
+                <a href="/Cari/CariSatisDetay/@item.CariID" class="btn btn-info text-white font-weight-bold rounded">Satış Geçmişi</a>
+  
+            </td>
+
+        </tr>
+        }
+    </tbody>
+
+</table>
+
+
+<div class="container">
+
+    <!-- Trigger the modal with a button -->
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Kapat</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            $('#TblCari').DataTable({
+                "initComplete": function () {
+                    var api = this.api();
+                    api.$('.td').click(function () {
+                        api.search(this.innerHTML).draw();
+                    });
+                }
+            });
+        });
+
+
+        $(function () {
+            // a tagimizde bulunan .view classımıza click olduğunda
+            $(".add").click(function () {
+                $(".modal-title").html("Cari Ekleme");
+                // data-target dan url mizi al
+                var url = $(this).data("cariaddids");
+                // bu urlimizi post et
+                $.get(url, function (data) { })
+                    //      eğer işlemimiz başarılı bir şekilde gerçekleşirse
+                    .done(function (data) {
+                        //    gelen datayı .modal-body mizin içerise html olarak ekle
+                        $("#myModal .modal-body").html(data);
+                        //  sonra da modalimizi göster
+                        $("#myModal").modal("show");
+                    })
+                    //  eğer işlem başarısız olursa
+                    .fail(function () {
+                        // modalımızın bodysine Error! yaz
+                        $("#myModal .modal-body").text("Error!!");
+                        //  sonra da modalimizi göster
+                        $("#myModal").modal("show");
+                    })
+
+            });
+        });
+
+        $('#TblCari tbody').on('click', '.cariSil', function () {
+            var sonuc = confirm("Kayıt Silinsin Mi ?");
+            if (sonuc) {
+                var cariId = $(this).data("cariid");
+                $.ajax({
+                    type: "POST",
+                    url: "/Cari/CariSil/" + cariId,
+                    success: function () {
+                        alert("Kayıt Silindi");
+                        window.location.replace("Cari/Index");
+                    },
+                    error: function () {
+                        alert("Kayıt Silme Sırasında Hata Oluştu !");
+                    }
+                });
+            }
+            else {
+
+            }
+        });
+
+
+
+        $(function () {
+            // a tagimizde bulunan .view classımıza click olduğunda
+            $('#TblCari tbody').on('click', '.view', function () {
+                $(".modal-title").html("Cari Güncelleme");
+                // data-target dan url mizi al
+                var url = $(this).data("cariids");
+                // bu urlimizi post et
+                $.post(url, function (data) { })
+                    //      eğer işlemimiz başarılı bir şekilde gerçekleşirse
+                    .done(function (data) {
+                        //    gelen datayı .modal-body mizin içerise html olarak ekle
+                        $("#myModal .modal-body").html(data);
+                        //  sonra da modalimizi göster
+                        $("#myModal").modal("show");
+                    })
+                    //  eğer işlem başarısız olursa
+                    .fail(function () {
+                        // modalımızın bodysine Error! yaz
+                        $("#myModal .modal-body").text("Error!!");
+                        //  sonra da modalimizi göster
+                        $("#myModal").modal("show");
+                    })
+
+            });
+        });
+
+
+    </script>
+}
+
+

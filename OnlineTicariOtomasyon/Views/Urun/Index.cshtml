@@ -1,0 +1,219 @@
+﻿@using OnlineTicariOtomasyon.Models.Siniflar
+@model List<Urun>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+
+@using (Html.BeginForm("Index","Urun",FormMethod.Get))
+{
+<p class="mt-2 mb-2">
+    Ürün Adı : @Html.TextBox("p")
+    <input type="submit" value="Ara" />
+</p>
+   
+}
+@*<a href="/Urun/UrunEkle" class="btn btn-primary btn-sm mt-2">Yeni Urun</a>*@
+<a class="btn btn-primary mt-2 mb-2 add text-white font-weight-bold" data-toggle="modal" data-urunaddids="/Urun/UrunEkle" data-target="#myModal">Yeni Urun</a>
+
+<table id="TblUrun" class="table table-bordered mt-2">
+    <thead>
+        <tr>
+            @*<th>ID</th>*@
+            <th>Ürün Adı</th>
+            <th>Marka</th>
+            <th>Stok</th>
+            <th>Alış Fiyatı</th>
+            <th>Şatış Fiyatı</th>
+            <th>Kategori</th>
+            <th>Görsel</th>
+            <th>Güncelle</th>
+            <th>Sil</th>
+            <th>Satış Yap</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+        <tr>
+            @*<td class="td">@item.UrunID</td>*@
+            <td class="td">@item.UrunAd</td>
+            <td class="td">@item.Marka</td>
+            <td class="td">@item.Stok</td>
+            <td class="td">@item.AlisFiyati ₺</td>
+            <td class="td">@item.SatisFiyati ₺</td>
+            <td class="td">@item.Kategori.KategoriAd</td>
+            <td class="td">@item.UrunGorsel</td>
+
+            <td>
+                <a class="btn btn-success rounded text-white font-weight-bold view" data-toggle="modal" data-urunids="/Urun/UrunGetir/@item.UrunID" data-target="#myModal">Güncelle</a>
+                @*<a class="btn btn-success btn-sm" href="/Urun/UrunGetir/@item.UrunID">Güncelle</a>*@
+            </td>
+            <td>
+                <a href="#" class="btn btn-danger rounded text-white font-weight-bold urunSil" data-urunid="@item.UrunID">Sil</a>
+                @*<a class="btn btn-danger btn-sm" href="/Urun/UrunSil/@item.UrunID">Sil</a>*@
+            </td>
+
+            <td>
+                <a class="btn btn-warning rounded text-white font-weight-bold viewSatis" data-toggle="modal" data-urunsatisids="/Urun/SatisYap/@item.UrunID" data-target="#myModal"> Satış Yap</a>
+          
+                @*<a class="btn btn-danger btn-sm" href="/Urun/UrunSil/@item.UrunID">Sil</a>*@
+            </td>
+        </tr>
+            }
+    </tbody>
+</table>
+
+
+
+
+<div class="container">
+
+    <!-- Trigger the modal with a button -->
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Kapat</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            $('#TblUrun').DataTable({
+                "initComplete": function () {
+                    var api = this.api();
+                    api.$('.td').click(function () {
+                        api.search(this.innerHTML).draw();
+                    });
+                }
+            });
+        });
+
+
+        $(function () {
+            // a tagimizde bulunan .view classımıza click olduğunda
+            $(".add").click(function () {
+                $(".modal-title").html("Urun Ekleme");
+                // data-target dan url mizi al
+                var url = $(this).data("urunaddids");
+                // bu urlimizi post et
+                $.get(url, function (data) { })
+                    //      eğer işlemimiz başarılı bir şekilde gerçekleşirse
+                    .done(function (data) {
+                        //    gelen datayı .modal-body mizin içerise html olarak ekle
+                        $("#myModal .modal-body").html(data);
+                        //  sonra da modalimizi göster
+                        $("#myModal").modal("show");
+                    })
+                    //  eğer işlem başarısız olursa
+                    .fail(function () {
+                        // modalımızın bodysine Error! yaz
+                        $("#myModal .modal-body").text("Error!!");
+                        //  sonra da modalimizi göster
+                        $("#myModal").modal("show");
+                    })
+
+            });
+        });
+
+        $('#TblUrun tbody').on('click', '.urunSil', function () {
+            var sonuc = confirm("Kayıt Silinsin Mi ?");
+            if (sonuc) {
+                var urunId = $(this).data("urunid");
+                $.ajax({
+                    type: "POST",
+                    url: "/Urun/UrunSil/" + urunId,
+                    success: function () {
+                        alert("Kayıt Silindi");
+                        window.location.replace("Urun/Index");
+                    },
+                    error: function () {
+                        alert("Kayıt Silme Sırasında Hata Oluştu !");
+                    }
+                });
+            }
+            else {
+
+            }
+        });
+
+
+
+        $(function () {
+            // a tagimizde bulunan .view classımıza click olduğunda
+            $('#TblUrun tbody').on('click', '.view', function () {
+                $(".modal-title").html("Ürün Güncelle");
+                // data-target dan url mizi al
+                var url = $(this).data("urunids");
+                // bu urlimizi post et
+                $.post(url, function (data) { })
+                    //      eğer işlemimiz başarılı bir şekilde gerçekleşirse
+                    .done(function (data) {
+                        //    gelen datayı .modal-body mizin içerise html olarak ekle
+                        $("#myModal .modal-body").html(data);
+                        //  sonra da modalimizi göster
+                        $("#myModal").modal("show");
+                    })
+                    //  eğer işlem başarısız olursa
+                    .fail(function () {
+                        // modalımızın bodysine Error! yaz
+                        $("#myModal .modal-body").text("Error!!");
+                        //  sonra da modalimizi göster
+                        $("#myModal").modal("show");
+                    })
+
+            });
+        });
+
+
+
+        $(function () {
+            // a tagimizde bulunan .view classımıza click olduğunda
+            $('#TblUrun tbody').on('click', '.viewSatis', function () {
+                $(".modal-title").html("Ürün Satış");
+                // data-target dan url mizi al
+                var url = $(this).data("urunsatisids");
+                // bu urlimizi post et
+                $.get(url, function (data) { })
+                    //      eğer işlemimiz başarılı bir şekilde gerçekleşirse
+                    .done(function (data) {
+                        //    gelen datayı .modal-body mizin içerise html olarak ekle
+                        $("#myModal .modal-body").html(data);
+                        //  sonra da modalimizi göster
+                        $("#myModal").modal("show");
+                    })
+                    //  eğer işlem başarısız olursa
+                    .fail(function () {
+                        // modalımızın bodysine Error! yaz
+                        $("#myModal .modal-body").text("Error!!");
+                        //  sonra da modalimizi göster
+                        $("#myModal").modal("show");
+                    })
+
+            });
+        });
+
+       
+   
+    </script>
+}
+

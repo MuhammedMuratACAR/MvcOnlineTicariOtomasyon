@@ -1,0 +1,160 @@
+﻿@using OnlineTicariOtomasyon.Models.Siniflar
+@model List<Kategori>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+@*<a href="/Kategori/KategoriEkle" class="btn btn-primary btn-sm mt-2 rounded">Yeni Kategori</a>*@
+<a class="btn btn-primary mt-2 mb-2 add text-white font-weight-bold" data-toggle="modal" data-kategoriaddids="/Kategori/KategoriEkle" data-target="#myModal">Yeni Kategori</a>
+<table id="TblKategori" class="table table-bordered mt-2">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Kategori Adı</th>
+            <th>Güncelle</th>
+            <th>Sil</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td class="td">@item.KategoriID</td>
+                <td class="td">@item.KategoriAd</td>
+                <td>
+                    <a class="btn btn-success rounded text-white font-weight-bold view" data-toggle="modal" data-kategoriids="/Kategori/KategoriGetir/@item.KategoriID" data-target="#myModal">Güncelle</a>
+                    @*<a class="btn btn-success btn-sm" href="/Kategori/KategoriGetir/@item.KategoriID">Güncelle</a>*@
+                </td>
+                <td>
+                    <a href="#" class="btn btn-danger text-white font-weight-bold rounded kategoriSil" data-kategoriid="@item.KategoriID">Sil</a>
+                    @*<a class="btn btn-danger btn-sm" href="/Kategori/KategoriSil/@item.KategoriID">Sil</a>*@
+                </td>
+
+
+            </tr>
+        }
+    </tbody>
+
+</table>
+
+
+<div class="container">
+
+    <!-- Trigger the modal with a button -->
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Kapat</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            $('#TblKategori').DataTable({
+                "initComplete": function () {
+                    var api = this.api();
+                    api.$('.td').click(function () {
+                        api.search(this.innerHTML).draw();
+                    });
+                }
+            });
+        });
+
+
+        $(function () {
+            // a tagimizde bulunan .view classımıza click olduğunda
+            $(".add").click(function () {
+                $(".modal-title").html("Kategori Ekleme");
+                // data-target dan url mizi al
+                var url = $(this).data("kategoriaddids");
+                // bu urlimizi post et
+                $.get(url, function (data) { })
+                    //      eğer işlemimiz başarılı bir şekilde gerçekleşirse
+                    .done(function (data) {
+                        //    gelen datayı .modal-body mizin içerise html olarak ekle
+                        $("#myModal .modal-body").html(data);
+                        //  sonra da modalimizi göster
+                        $("#myModal").modal("show");
+                    })
+                    //  eğer işlem başarısız olursa
+                    .fail(function () {
+                        // modalımızın bodysine Error! yaz
+                        $("#myModal .modal-body").text("Error!!");
+                        //  sonra da modalimizi göster
+                        $("#myModal").modal("show");
+                    })
+
+            });
+        });
+
+        $('#TblKategori tbody').on('click', '.kategoriSil', function () {
+            var sonuc = confirm("Kayıt Silinsin Mi ?");
+            if (sonuc) {
+                var kategoriId = $(this).data("kategoriid");
+                $.ajax({
+                    type: "POST",
+                    url: "/Kategori/KategoriSil/" + kategoriId,
+                    success: function () {
+                        alert("Kayıt Silindi");
+                        window.location.replace("Kategori/Index");
+                    },
+                    error: function () {
+                        alert("Kayıt Silme Sırasında Hata Oluştu !");
+                    }
+                });
+            }
+            else {
+
+            }
+        });
+
+
+
+        $(function () {
+            // a tagimizde bulunan .view classımıza click olduğunda
+            $('#TblKategori tbody').on('click', '.view', function () {
+                $(".modal-title").html("Kategori Güncelleme");
+                // data-target dan url mizi al
+                var url = $(this).data("kategoriids");
+                // bu urlimizi post et
+                $.post(url, function (data) { })
+                    //      eğer işlemimiz başarılı bir şekilde gerçekleşirse
+                    .done(function (data) {
+                        //    gelen datayı .modal-body mizin içerise html olarak ekle
+                        $("#myModal .modal-body").html(data);
+                        //  sonra da modalimizi göster
+                        $("#myModal").modal("show");
+                    })
+                    //  eğer işlem başarısız olursa
+                    .fail(function () {
+                        // modalımızın bodysine Error! yaz
+                        $("#myModal .modal-body").text("Error!!");
+                        //  sonra da modalimizi göster
+                        $("#myModal").modal("show");
+                    })
+
+            });
+        });
+
+
+    </script>
+}

@@ -1,0 +1,57 @@
+﻿@using OnlineTicariOtomasyon.Models.Siniflar
+@model List<SatisHareket>
+@{
+    ViewBag.Title = "CariSatisDetay";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+
+<div class="alert alert-primary text-center mt-3 font-weight-bold">@ViewBag.cariAd Müsterisine Ait Satışlar</div>
+
+<table id="TblSatisDetay" class="table table-bordered mt-2">
+    <thead>
+        <tr>
+            <th>Satış ID</th>
+            <th>Personel</th>
+            <th>Ürün Adı</th>
+            <th>Fiyat</th>
+            <th>Adet</th>
+            <th>Toplam Tutar</th>
+            <th>Tarih</th>
+            <th>Yazdır</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td class="td">@item.SatisID</td>
+                <td class="td">@item.Personel.PersonelAd @item.Personel.PersonelSoyad</td>
+                <td class="td">@item.Urun.UrunAd</td>
+                <td class="td">@item.Fiyat</td>
+                <td class="td">@item.Adet</td>
+                <td class="td">@item.ToplamTutar</td>
+                <td class="td">@item.Tarih</td>
+                <td class="td"><a href="#" class="btn btn-warning rounded font-weight-bold">Yazdır</a></td>
+
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            $('#TblSatisDetay').DataTable({
+                "initComplete": function () {
+                    var api = this.api();
+                    api.$('.td').click(function () {
+                        api.search(this.innerHTML).draw();
+                    });
+                }
+            });
+        });
+        </script>
+    }
+
+

@@ -1,0 +1,63 @@
+﻿@using OnlineTicariOtomasyon.Models.Siniflar
+@model List<Urun> 
+<div class="row">
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Ürünler</h3>
+
+                <div class="card-tools">
+                    <div class="input-group input-group-sm" style="width: 150px;">
+                        <input type="text" name="table_search" class="form-control float-right" placeholder="Ara">
+
+                        <div class="input-group-append">
+                            <button type="submit" class="btn btn-default"><i class="fas fa-search"></i></button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /.card-header -->
+            <div class="card-body table-responsive p-0" style="height: 300px;">
+                <table class="table table-head-fixed text-nowrap">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Urun Ad</th>
+                            <th>Kategori</th>
+                            <th>Marka</th>
+                            <th>Stok</th>
+                            <th>Alış Fiyati</th>
+                            <th>Satış Fiyati</th>
+                            <th>Ürün Görsel</th>
+                            <th>Ürün Bilgisi</th>
+
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        @foreach (var item in Model)
+                        {
+                        <tr>
+                            <td class="td">@item.UrunID</td>
+                            <td class="td">@item.UrunAd</td>
+                            <td class="td">@item.Kategori.KategoriAd</td>
+                            <td class="td">@item.Marka</td>
+                            <td class="td">@item.Stok</td>
+                            <td class="td">@item.AlisFiyati</td>
+                            <td class="td">@item.SatisFiyati</td>
+                            <td class="td">@item.UrunGorsel</td>
+                            <td class="td">@item.UrunBilgisi</td>
+
+                            
+                        </tr>
+                        }
+                       
+
+                    </tbody>
+                </table>
+            </div>
+            <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+    </div>
+</div>

@@ -1,0 +1,165 @@
+﻿@using OnlineTicariOtomasyon.Models.Siniflar
+@model List<Departman>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+
+
+
+@*<a href="/Departman/DepartmanEkle" class="btn btn-primary btn-sm mt-2 mb-2 rounded">Yeni Departman</a>*@
+<a class="btn btn-primary mt-2 mb-2 add text-white font-weight-bold" data-toggle="modal" data-departmanaddids="/Departman/DepartmanEkle" data-target="#myModal">Yeni Departman</a>
+
+<table id="TblDepartman" class="table table-bordered mt-4">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Departman Adı</th>
+            <th>Güncelle</th>
+            <th>Sil</th>
+            <th>Detaylar</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td class="td">@item.DepartmanID</td>
+                <td class="td">@item.DepartmanAd</td>
+                <td>
+                    <a class="btn btn-success rounded text-white font-weight-bold view" data-toggle="modal" data-departmanids="/Departman/DepartmanGetir/@item.DepartmanID" data-target="#myModal">Güncelle</a>
+                    @*<a class="btn btn-success btn-sm" href="/Departman/DepartmanGetir/@item.DepartmanID">Güncelle</a>*@
+                </td>
+                <td>
+                    <a href="#" class="btn btn-danger rounded text-white font-weight-bold departmanSil" data-departmanid="@item.DepartmanID">Sil</a>
+                    @*<a class="btn btn-danger btn-sm" href="/Departman/DepartmanSil/@item.DepartmanID">Sil</a>*@
+                </td>
+                <td><a class="btn btn-info rounded text-white font-weight-bold" href="/Departman/DepartmanDetay/@item.DepartmanID">Detaylar</a></td>
+
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+<div class="container">
+
+    <!-- Trigger the modal with a button -->
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+                  
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Kapat</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            $('#TblDepartman').DataTable({
+                "initComplete": function () {
+                    var api = this.api();
+                    api.$('.td').click(function () {
+                        api.search(this.innerHTML).draw();
+                    });
+                }
+            });
+        });
+
+
+        $(function () {
+            // a tagimizde bulunan .view classımıza click olduğunda
+            $(".add").click(function () {
+                $(".modal-title").html("Departman Ekleme");
+                // data-target dan url mizi al
+                var url = $(this).data("departmanaddids");
+                // bu urlimizi post et
+                $.get(url, function (data) { })
+                    //      eğer işlemimiz başarılı bir şekilde gerçekleşirse
+                    .done(function (data) {
+                        //    gelen datayı .modal-body mizin içerise html olarak ekle
+                        $("#myModal .modal-body").html(data);
+                        //  sonra da modalimizi göster
+                        $("#myModal").modal("show");
+                    })
+                    //  eğer işlem başarısız olursa
+                    .fail(function () {
+                        // modalımızın bodysine Error! yaz
+                        $("#myModal .modal-body").text("Error!!");
+                        //  sonra da modalimizi göster
+                        $("#myModal").modal("show");
+                    })
+
+            });
+        });
+
+        $('#TblDepartman tbody').on('click', '.departmanSil', function () {
+            var sonuc = confirm("Kayıt Silinsin Mi ?");
+            if (sonuc) {
+                var departmanId = $(this).data("departmanid");
+                $.ajax({
+                    type: "POST",
+                    url: "/Departman/DepartmanSil/" + departmanId,
+                    success: function () {
+                        alert("Kayıt Silindi");
+                        window.location.replace("Departman/Index");
+                    },
+                    error: function () {
+                        alert("Kayıt Silme Sırasında Hata Oluştu !");
+                    }
+                });
+            }
+            else {
+
+            }
+        });
+
+
+
+        $(function () {
+            // a tagimizde bulunan .view classımıza click olduğunda
+            $('#TblDepartman tbody').on('click', '.view', function () {
+                $(".modal-title").html("Departman Güncelle");
+                // data-target dan url mizi al
+                var url = $(this).data("departmanids");
+                // bu urlimizi post et
+                $.post(url, function (data) { })
+                    //      eğer işlemimiz başarılı bir şekilde gerçekleşirse
+                    .done(function (data) {
+                        //    gelen datayı .modal-body mizin içerise html olarak ekle
+                        $("#myModal .modal-body").html(data);
+                        //  sonra da modalimizi göster
+                        $("#myModal").modal("show");
+                    })
+                    //  eğer işlem başarısız olursa
+                    .fail(function () {
+                        // modalımızın bodysine Error! yaz
+                        $("#myModal .modal-body").text("Error!!");
+                        //  sonra da modalimizi göster
+                        $("#myModal").modal("show");
+                    })
+
+            });
+        });
+
+
+    </script>
+}

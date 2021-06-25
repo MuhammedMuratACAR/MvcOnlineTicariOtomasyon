@@ -1,0 +1,54 @@
+﻿@using OnlineTicariOtomasyon.Models.Siniflar
+@model List<Personel>
+@{
+    ViewBag.Title = "DepartmanDetay";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+
+@*<ol class="breadcrumb mb-4 mt-3">
+        <li class="breadcrumb-item active"></li>
+    </ol>*@
+
+<div class="alert alert-primary text-center mt-3 font-weight-bold">@ViewBag.departmanAd Departmanına Ait Personeller</div>
+
+<table id="TblDepartmanDetay" class="table table-bordered mt-2">
+    <thead>
+        <tr>
+            @*<th>Personel ID</th>*@
+            <th>Adı Soyadı</th>
+            <th>Görsel</th>
+            <th>Satışlar</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                @*<td class="td">@item.PersonelID</td>*@
+                <td class="td">@item.PersonelAd  @item.PersonelSoyad</td>
+                <td class="td"><img src="@item.PersonelGorsel" alt="@item.PersonelAd  @item.PersonelSoyad" width="100px;"/> </td>
+
+                <td><a class="btn btn-info rounded text-white font-weight-bold" href="/Departman/SatisDetay/@item.PersonelID">Satışlar</a></td>
+
+
+            </tr>
+        }
+    </tbody>
+</table>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            $('#TblDepartmanDetay').DataTable({
+                "initComplete": function () {
+                    var api = this.api();
+                    api.$('.td').click(function () {
+                        api.search(this.innerHTML).draw();
+                    });
+                }
+            });
+        });
+    </script>
+}
+

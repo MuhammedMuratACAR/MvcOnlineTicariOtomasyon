@@ -1,0 +1,152 @@
+﻿@using OnlineTicariOtomasyon.Models.Siniflar
+@model List<SatisHareket>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+<a class="btn btn-primary mt-2 mb-2 add text-white font-weight-bold" data-toggle="modal" data-satisaddids="/Satis/SatisEkle" data-target="#myModal">Yeni Satis Yap</a>
+<table id="TblSatis" class="table table-bordered mt-2">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Ürün</th>
+            <th>Cari</th>
+            <th>Personel</th>
+            <th>Adet</th>
+            <th>Fiyat</th>
+            <th>Toplam</th>
+            <th>Tarih</th>
+            <th>Güncelle</th>
+            <th>Detaylar</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td class="td">@item.SatisID</td>
+                <td class="td">@item.Urun.UrunAd</td>
+                <td class="td">@item.Cariler.CariAd @item.Cariler.CariSoyad</td>
+                <td class="td">@item.Personel.PersonelAd @item.Personel.PersonelSoyad</td>
+                <td class="td">@item.Adet</td>
+                <td class="td">@item.Fiyat</td>
+                <td class="td">@item.ToplamTutar</td>
+                <td class="td">@item.Tarih</td>
+
+
+
+                <td>
+                    <a class="btn btn-success rounded text-white font-weight-bold view" data-toggle="modal" data-satisids="/Satis/SatisGetir/@item.SatisID" data-target="#myModal">Güncelle</a>
+                </td>
+                <td>
+                    <a href="/Satis/SatisDetay/@item.SatisID" class="btn btn-info text-white font-weight-bold rounded">Detay</a>
+
+                </td>
+
+            </tr>
+        }
+    </tbody>
+
+</table>
+
+
+<div class="container">
+
+    <!-- Trigger the modal with a button -->
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Kapat</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            $('#TblSatis').DataTable({
+                "initComplete": function () {
+                    var api = this.api();
+                    api.$('.td').click(function () {
+                        api.search(this.innerHTML).draw();
+                    });
+                }
+            });
+        });
+
+
+        $(function () {
+            // a tagimizde bulunan .view classımıza click olduğunda
+            $(".add").click(function () {
+                $(".modal-title").html("Satış Ekleme");
+                // data-target dan url mizi al
+                var url = $(this).data("satisaddids");
+                // bu urlimizi post et
+                $.get(url, function (data) { })
+                    //      eğer işlemimiz başarılı bir şekilde gerçekleşirse
+                    .done(function (data) {
+                        //    gelen datayı .modal-body mizin içerise html olarak ekle
+                        $("#myModal .modal-body").html(data);
+                        //  sonra da modalimizi göster
+                        $("#myModal").modal("show");
+                    })
+                    //  eğer işlem başarısız olursa
+                    .fail(function () {
+                        // modalımızın bodysine Error! yaz
+                        $("#myModal .modal-body").text("Error!!");
+                        //  sonra da modalimizi göster
+                        $("#myModal").modal("show");
+                    })
+
+            });
+        });
+
+
+        $(function () {
+            // a tagimizde bulunan .view classımıza click olduğunda
+            $('#TblSatis tbody').on('click', '.view', function () {
+                $(".modal-title").html("Satış Güncelleme");
+                // data-target dan url mizi al
+                var url = $(this).data("satisids");
+                // bu urlimizi post et
+                $.post(url, function (data) { })
+                    //      eğer işlemimiz başarılı bir şekilde gerçekleşirse
+                    .done(function (data) {
+                        //    gelen datayı .modal-body mizin içerise html olarak ekle
+                        $("#myModal .modal-body").html(data);
+                        //  sonra da modalimizi göster
+                        $("#myModal").modal("show");
+                    })
+                    //  eğer işlem başarısız olursa
+                    .fail(function () {
+                        // modalımızın bodysine Error! yaz
+                        $("#myModal .modal-body").text("Error!!");
+                        //  sonra da modalimizi göster
+                        $("#myModal").modal("show");
+                    })
+
+            });
+        });
+
+
+    </script>
+}
+
+
+

@@ -1,0 +1,159 @@
+﻿@using OnlineTicariOtomasyon.Models.Siniflar
+@model List<Faturalar>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+
+<a class="btn btn-primary mt-2 mb-2 add text-white font-weight-bold" data-toggle="modal" data-faturaaddids="/Fatura/FaturaEkle" data-target="#myModal">Yeni Fatura</a>
+
+<table id="TblFatura" class="table table-bordered mt-4">
+    <thead>
+        <tr>
+            @*<th>ID</th>*@
+            <th>Seri Sıra No</th>
+            @*<th>Sıra No</th>*@
+            <th>Vergi Dairesi</th>
+            <th>Tarih</th>
+            <th>Saat</th>
+            <th>Toplam</th>
+            <th>Teslim Eden</th>
+            <th>Teslim Alan</th>
+
+            <th>Sil</th>
+            <th>Detaylar</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                @*<td class="td">@item.FaturaID</td>*@
+                <td class="td">@item.FaturaSeriNo @item.FaturaSiraNo</td>
+                @*<td class="td">@item.FaturaSiraNo</td>*@
+                <td class="td">@item.VergiDairesi</td>
+                <td class="td">@item.Tarih.ToString("dd-MM-yyyy")</td>
+                <td class="td">@item.Saat</td>
+                <td class="td">@item.Toplam ₺</td>
+                <td class="td">@item.TeslimEden</td>
+                <td class="td">@item.TeslimAlan</td>
+
+
+                <td>
+                    <a class="btn btn-success rounded text-white font-weight-bold view" data-toggle="modal" data-faturaids="/Fatura/FaturaGetir/@item.FaturaID" data-target="#myModal">Güncelle</a>
+
+                </td>
+
+                <td><a class="btn btn-info rounded text-white font-weight-bold" href="/Fatura/FaturaDetay/@item.FaturaID">Detaylar</a></td>
+
+            </tr>
+        }
+    </tbody>
+</table>
+
+
+
+<div class="container">
+
+    <!-- Trigger the modal with a button -->
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Kapat</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+@section scripts {
+    <script>
+
+
+      
+
+        $(document).ready(function () {
+            $('#TblFatura').DataTable({
+                "initComplete": function () {
+                    var api = this.api();
+                    api.$('.td').click(function () {
+                        api.search(this.innerHTML).draw();
+                    });
+                }
+            });
+        });
+
+
+        $(function () {
+            // a tagimizde bulunan .view classımıza click olduğunda
+            $(".add").click(function () {
+                $(".modal-title").html("Fatura Ekleme");
+                // data-target dan url mizi al
+                var url = $(this).data("faturaaddids");
+                // bu urlimizi post et
+                $.get(url, function (data) { })
+                    //      eğer işlemimiz başarılı bir şekilde gerçekleşirse
+                    .done(function (data) {
+                        //    gelen datayı .modal-body mizin içerise html olarak ekle
+                        $("#myModal .modal-body").html(data);
+                        //  sonra da modalimizi göster
+                        $("#myModal").modal("show");
+                    })
+                    //  eğer işlem başarısız olursa
+                    .fail(function () {
+                        // modalımızın bodysine Error! yaz
+                        $("#myModal .modal-body").text("Error!!");
+                        //  sonra da modalimizi göster
+                        $("#myModal").modal("show");
+                    })
+
+            });
+        });
+
+      
+
+
+        $(function () {
+            // a tagimizde bulunan .view classımıza click olduğunda
+            $('#TblFatura tbody').on('click', '.view', function () {
+                $(".modal-title").html("Fatura Güncelle");
+                // data-target dan url mizi al
+                var url = $(this).data("faturaids");
+                // bu urlimizi post et
+                $.post(url, function (data) { })
+                    //      eğer işlemimiz başarılı bir şekilde gerçekleşirse
+                    .done(function (data) {
+                        //    gelen datayı .modal-body mizin içerise html olarak ekle
+                        $("#myModal .modal-body").html(data);
+                        //  sonra da modalimizi göster
+                        $("#myModal").modal("show");
+                    })
+                    //  eğer işlem başarısız olursa
+                    .fail(function () {
+                        // modalımızın bodysine Error! yaz
+                        $("#myModal .modal-body").text("Error!!");
+                        //  sonra da modalimizi göster
+                        $("#myModal").modal("show");
+                    })
+
+            });
+        });
+
+
+    </script>
+}

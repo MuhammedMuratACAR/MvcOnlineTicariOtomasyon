@@ -1,0 +1,27 @@
+﻿@using OnlineTicariOtomasyon.Models.Siniflar
+@model List<KargoTakip>
+@{
+    Layout = null;
+}
+
+<table id="TblKargoTakip" class="table table-bordered mt-2">
+    <thead>
+        <tr>
+         
+            <th>Açıklama</th>
+            <th>Tarih</th>     
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+              
+                <td class="td">@item.Aciklama</td>
+                <td class="td">@item.TarihZaman.ToString("dd-MM-yyyy")</td>
+
+            </tr>
+        }
+    </tbody>
+</table>
+

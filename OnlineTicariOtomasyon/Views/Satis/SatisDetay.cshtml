@@ -1,0 +1,72 @@
+﻿@using OnlineTicariOtomasyon.Models.Siniflar
+@model List<SatisHareket>
+@{
+    ViewBag.Title = "Satis Detay";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+
+
+
+<div class="alert alert-primary text-center mt-3 font-weight-bold">Satış Detay</div>
+<button href="#" class="btn btn-warning rounded font-weight-bold float-right">Yazdır</button>
+
+<table id="example" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%">
+    <thead>
+        <tr>
+            <th>Satış ID</th>
+            <th>Ürün Adı</th>
+            <th>Cari</th>
+            <th>Personel</th>
+            <th>Fiyat</th>
+            <th>Adet</th>
+            <th>Toplam Tutar</th>
+            <th>Tarih</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td class="td">@item.SatisID</td>
+                <td class="td">@item.Urun.UrunAd</td>
+                <td class="td">@item.Cariler.CariAd @item.Cariler.CariSoyad</td>
+                <td class="td">@item.Personel.PersonelAd @item.Personel.PersonelSoyad</td>
+                <td class="td">@item.Fiyat</td>
+                <td class="td">@item.Adet</td>
+                <td class="td">@item.ToplamTutar</td>
+                <td class="td">@item.Tarih</td>
+
+
+            </tr>
+        }
+    </tbody>
+
+</table>
+
+
+@section scripts {
+    <script>
+
+
+        $(document).ready(function () {
+
+            var table = $('#example').DataTable({
+
+                lengthChange: false,
+
+                buttons: ['copy', 'excel', 'csv', 'pdf', 'colvis']
+
+            });
+
+
+
+            table.buttons().container()
+
+                .appendTo('#example_wrapper .col-md-6:eq(0)');
+
+        });
+    </script>
+
+
+}

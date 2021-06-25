@@ -1,0 +1,172 @@
+﻿@using OnlineTicariOtomasyon.Models.Siniflar
+@model List<Personel>
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/AdminLayout.cshtml";
+}
+<a class="btn btn-primary mt-2 mb-2 add text-white font-weight-bold" data-toggle="modal" data-personeladdids="/Personel/PersonelEkle" data-target="#myModal">Yeni Personel</a>
+<table id="TblPersonel" class="table table-bordered mt-2">
+    <thead>
+        <tr>
+            <th>ID</th>
+            <th>Ad</th>
+            <th>Soyad</th>
+            <th>Görsel</th>
+            <th>Departman</th>
+            <th>Güncelle</th>
+            <th>Sil</th>
+            <th>Satışlar</th>
+
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td class="td">@item.PersonelID</td>
+                <td class="td">@item.PersonelAd</td>
+                <td class="td">@item.PersonelSoyad</td>
+                <td class="td"><img src="@item.PersonelGorsel" alt="@item.PersonelAd @item.PersonelSoyad" width="100px;" /> </td>
+                <td class="td">@item.Departman.DepartmanAd</td>
+
+                <td>
+                    <a class="btn btn-success rounded text-white font-weight-bold view" data-toggle="modal" data-personelids="/Personel/PersonelGetir/@item.PersonelID" data-target="#myModal">Güncelle</a>
+                   
+                </td>
+                <td>
+                    <a href="#" class="btn btn-danger text-white font-weight-bold rounded personelSil" data-cariid="@item.PersonelID">Sil</a>
+                  
+                </td>
+                <td>
+                    <a href="/Departman/SatisDetay/@item.PersonelID" class="btn btn-info text-white font-weight-bold rounded">Satış Geçmişi</a>
+
+                </td>
+
+            </tr>
+        }
+    </tbody>
+
+</table>
+
+
+<div class="container">
+
+    <!-- Trigger the modal with a button -->
+    <!-- Modal -->
+    <div class="modal fade" id="myModal" role="dialog">
+        <div class="modal-dialog">
+
+            <!-- Modal content-->
+            <div class="modal-content">
+                <div class="modal-header">
+
+                    <h4 class="modal-title"></h4>
+                </div>
+                <div class="modal-body">
+
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" data-dismiss="modal">Kapat</button>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            $('#TblPersonel').DataTable({
+                "initComplete": function () {
+                    var api = this.api();
+                    api.$('.td').click(function () {
+                        api.search(this.innerHTML).draw();
+                    });
+                }
+            });
+        });
+
+
+        $(function () {
+            // a tagimizde bulunan .view classımıza click olduğunda
+            $(".add").click(function () {
+                $(".modal-title").html("Personel Ekleme");
+                // data-target dan url mizi al
+                var url = $(this).data("personeladdids");
+                // bu urlimizi post et
+                $.get(url, function (data) { })
+                    //      eğer işlemimiz başarılı bir şekilde gerçekleşirse
+                    .done(function (data) {
+                        //    gelen datayı .modal-body mizin içerise html olarak ekle
+                        $("#myModal .modal-body").html(data);
+                        //  sonra da modalimizi göster
+                        $("#myModal").modal("show");
+                    })
+                    //  eğer işlem başarısız olursa
+                    .fail(function () {
+                        // modalımızın bodysine Error! yaz
+                        $("#myModal .modal-body").text("Error!!");
+                        //  sonra da modalimizi göster
+                        $("#myModal").modal("show");
+                    })
+
+            });
+        });
+
+        $('#TblPersonel tbody').on('click', '.personelSil', function () {
+            var sonuc = confirm("Kayıt Silinsin Mi ?");
+            if (sonuc) {
+                var personelId = $(this).data("personelid");
+                $.ajax({
+                    type: "POST",
+                    url: "/Personel/PersonelSil/" + personelId,
+                    success: function () {
+                        alert("Kayıt Silindi");
+                        window.location.replace("Personel/Index");
+                    },
+                    error: function () {
+                        alert("Kayıt Silme Sırasında Hata Oluştu !");
+                    }
+                });
+            }
+            else {
+
+            }
+        });
+
+
+
+        $(function () {
+            // a tagimizde bulunan .view classımıza click olduğunda
+            $('#TblPersonel tbody').on('click', '.view', function () {
+                $(".modal-title").html("Personel Güncelleme");
+                // data-target dan url mizi al
+                var url = $(this).data("personelids");
+                // bu urlimizi post et
+                $.post(url, function (data) { })
+                    //      eğer işlemimiz başarılı bir şekilde gerçekleşirse
+                    .done(function (data) {
+                        //    gelen datayı .modal-body mizin içerise html olarak ekle
+                        $("#myModal .modal-body").html(data);
+                        //  sonra da modalimizi göster
+                        $("#myModal").modal("show");
+                    })
+                    //  eğer işlem başarısız olursa
+                    .fail(function () {
+                        // modalımızın bodysine Error! yaz
+                        $("#myModal .modal-body").text("Error!!");
+                        //  sonra da modalimizi göster
+                        $("#myModal").modal("show");
+                    })
+
+            });
+        });
+
+
+    </script>
+}
+
+
+

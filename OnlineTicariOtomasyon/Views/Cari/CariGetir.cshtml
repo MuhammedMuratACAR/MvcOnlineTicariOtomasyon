@@ -1,0 +1,34 @@
+﻿@model OnlineTicariOtomasyon.Models.Siniflar.Cariler
+@{
+    ViewBag.Title = "CariGetir";
+    Layout = null;
+}
+
+@using (Html.BeginForm("CariGuncelle", "Cari", FormMethod.Post))
+{
+    <div class="form-group">
+        @Html.HiddenFor(x => x.CariID)
+    </div>
+    <div class="form-group">
+        <label>Cari Ad</label>
+        @Html.TextBoxFor(x => x.CariAd, new { @class = "form-control" })
+        @Html.ValidationMessageFor(x=>x.CariAd,"",new { @class="text-danger"})
+    </div>
+    <div class="form-group">
+        <label>Cari Soyad</label>
+        @Html.TextBoxFor(x => x.CariSoyad, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label>Cari Şehir</label>
+        @Html.TextBoxFor(x => x.CariSehir, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label>Cari Mail</label>
+        @Html.TextBoxFor(x => x.CariMail, new { @class = "form-control", @type = "email" })
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-warning rounded font-weight-bold">Güncelle</button>
+    </div>
+
+}
+

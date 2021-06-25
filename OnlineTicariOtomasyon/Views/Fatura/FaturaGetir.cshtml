@@ -1,0 +1,51 @@
+﻿@model OnlineTicariOtomasyon.Models.Siniflar.Faturalar
+@{
+    ViewBag.Title = "FaturaGetir";
+    Layout = null;
+}
+
+
+@using (Html.BeginForm("FaturaGuncelle", "Fatura", FormMethod.Post))
+{
+    <div class="form-group">
+        @Html.HiddenFor(x => x.FaturaID, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label>Seri No</label>
+        @Html.TextBoxFor(x => x.FaturaSeriNo, new { @class = "form-control", @maxlength = "1" })
+    </div>
+    <div class="form-group">
+        <label>Sıra No</label>
+        @Html.TextBoxFor(x => x.FaturaSiraNo, new { @class = "form-control", @maxlength = "6" })
+    </div>
+    <div class="form-group">
+        <label>Tarih</label>
+        @Html.TextBoxFor(x => x.Tarih, "{0:yyyy-MM-dd}", new { @class = "form-control", @id = "faturaTarih", @type = "date" })
+    </div>
+    <div class="form-group">
+        <label>Saat</label>
+        @Html.TextBoxFor(x => x.Saat, new { @class = "form-control", @type = "time" })
+    </div>
+    <div class="form-group">
+        <label>Toplam</label>
+        @Html.TextBoxFor(x => x.Toplam, new { @class = "form-control"})
+    </div>
+    <div class="form-group">
+        <label>Vergi Dairesi</label>
+        @Html.TextBoxFor(x => x.VergiDairesi, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label>Teslim Eden</label>
+        @Html.TextBoxFor(x => x.TeslimEden, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label>Teslim Alan</label>
+        @Html.TextBoxFor(x => x.TeslimAlan, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary rounded">Kaydet</button>
+    </div>
+
+}
+
+

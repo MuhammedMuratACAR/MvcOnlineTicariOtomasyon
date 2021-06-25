@@ -1,0 +1,32 @@
+﻿@model OnlineTicariOtomasyon.Models.Siniflar.Personel
+@{
+    ViewBag.Title = "PersonelEkle";
+    Layout = null;
+}
+
+@using (Html.BeginForm("PersonelEkle", "Personel", FormMethod.Post,new { enctype="multipart/form-data"}))
+{
+    <div class="form-group">
+        <label>Personel Ad</label>
+        @Html.TextBoxFor(x => x.PersonelAd, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label>Personel Soyad</label>
+        @Html.TextBoxFor(x => x.PersonelSoyad, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label>Personel Görsel</label>
+        @*@Html.TextBoxFor(x => x.PersonelGorsel, new { @class = "form-control" })*@
+    <input type="file" name="PersonelGorsel"/>
+    </div>
+    <div class="form-group">
+        <label>Departman</label>
+        @Html.DropDownListFor(x => x.DepartmanID, (List<SelectListItem>)ViewBag.depart, new { @class = "form-control" })
+    </div>
+
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary rounded text-white font-weight-bold">Kaydet</button>
+    </div>
+}
+
+

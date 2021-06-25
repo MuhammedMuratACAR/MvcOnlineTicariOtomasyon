@@ -1,0 +1,50 @@
+﻿@model OnlineTicariOtomasyon.Models.Siniflar.Urun
+@{
+    ViewBag.Title = "UrunEkle";
+    Layout = null;
+}
+
+@using (Html.BeginForm("UrunEkle", "Urun", FormMethod.Post))
+{
+    <div class="form-group">
+        <label>Ürün Ad</label>
+        @Html.TextBoxFor(x => x.UrunAd, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label>Marka</label>
+        @Html.TextBoxFor(x => x.Marka, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label>Stok</label>
+        @Html.TextBoxFor(x => x.Stok, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label>Alış Fiyati</label>
+        @Html.TextBoxFor(x => x.AlisFiyati, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label>Satış Fiyati</label>
+        @Html.TextBoxFor(x => x.SatisFiyati, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label>Kategori</label>
+        @*@Html.TextBoxFor(x => x.KategoriID, new { @class = "form-control" })*@
+        @Html.DropDownListFor(x => x.KategoriID, (List<SelectListItem>)ViewBag.dgr1, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label>Ürün Görsel</label>
+        @Html.TextBoxFor(x => x.UrunGorsel, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <label>Durum</label>
+
+        <select class="form-control" name="Durum">
+            <option value="True" selected="selected">True</option>
+            <option value="False">False</option>
+        </select>
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-primary rounded text-white font-weight-bold">Kaydet</button>
+    </div>
+}
+

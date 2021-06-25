@@ -1,0 +1,19 @@
+﻿@model OnlineTicariOtomasyon.Models.Siniflar.Departman
+@{
+    ViewBag.Title = "DepartmanGetir";
+    Layout = null;
+}
+
+@using (Html.BeginForm("DepartmanGuncelle", "Departman", FormMethod.Post))
+{
+    <div class="form-group">
+        @Html.HiddenFor(x => x.DepartmanID)
+    </div>
+    <div class="form-group">
+        <label>Departman Ad</label>
+        @Html.TextBoxFor(x => x.DepartmanAd, new { @class = "form-control" })
+    </div>
+    <div class="form-group">
+        <button type="submit" class="btn btn-warning rounded font-weight-bold">Güncelle</button>
+    </div>
+}
